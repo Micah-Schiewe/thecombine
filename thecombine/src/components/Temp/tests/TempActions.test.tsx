@@ -19,10 +19,11 @@ describe("TempAction Tests", () => {
   // Test whether asyncPressButton results in certain changes to state
   test("asyncButtonPress correctly affects state", () => {
     const mockStore = createMockStore(mockState);
-    const mockDispatch = mockStore.dispatch(action.asyncPressButton());
 
-    mockDispatch.then(() => {
-      expect(mockStore.getActions()).toEqual([{ bP }]);
+    mockStore.dispatch<any>(action.asyncPressButton()).then(() => {
+      () => {
+        expect(mockStore.getActions()).toEqual([{ bP }]);
+      };
     });
   });
 });
