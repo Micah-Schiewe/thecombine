@@ -11,8 +11,8 @@ using BackendFramework.Interfaces;
 
 namespace BackendFramework.Controllers
 {
-    //[Produces("application/")]
-    [Route("v1/Collection")]
+    [Produces("application/json")]
+    [Route("v1/Project/Words")]
     public class WordController : Controller
     {
         private readonly IWordService _wordService;
@@ -20,6 +20,12 @@ namespace BackendFramework.Controllers
         {
             _wordService = wordService;
         }
+
+        public async Task<string> Message()
+        {
+            return "this is the database mainpage";
+        }
+
         // GET: v1/collection
         [EnableCors("AllowAll")]
         [HttpGet]
@@ -27,8 +33,27 @@ namespace BackendFramework.Controllers
         {
             return new ObjectResult(await _wordService.GetAllWords());
         }
+
+        // GET: v1/project/words/frontier
+        [HttpGet("frontier")]
+        public async Task<IActionResult> GetFrontier()
+        {
+            return new ObjectResult("This can't be written until the frontier exists");
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete()
+        {
+            // if( isTrue == true)
+            // {
+            return new ObjectResult(await _wordService.DeleteAllWords());
+            // }
+            // return new ObjectResult(isTrue);
+
+        }
+
         // GET: v1/collection/name
-        [HttpGet("{name}", Name = "Get")]
+        [HttpGet("{Id}", Name = "Get")]
         public async Task<IActionResult> Get(string Id)
         {
             var word = await _wordService.GetWord(Id);
@@ -48,7 +73,7 @@ namespace BackendFramework.Controllers
 
         // PUT: v1/collection/5
         [HttpPut("{Id}")]
-        public async Task<IActionResult> Put(string Id, [FromBody]Word word)   //also I dont think we need this
+        public async Task<IActionResult> Put(string Id, Word word)   //also I dont think we need this
         {
             var document = await _wordService.GetWord(Id);
             if (document == null)
@@ -58,7 +83,7 @@ namespace BackendFramework.Controllers
             return new OkObjectResult(word.Id);
         }
         // DELETE: v1/ApiWithActions/5
-        [HttpDelete("{name}")]
+        [HttpDelete("{Id}")]
         public async Task<IActionResult> Delete(string Id)
         {
             if (await _wordService.Delete(Id))
